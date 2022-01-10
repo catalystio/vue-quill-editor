@@ -5,18 +5,13 @@
 * Github: https://github.com/surmon-china/vue-quill-editor
 */
 
-import _Quill from 'quill'
+import Quill from 'quill'
 import quillEditor from './editor.vue'
 
-const Quill = window.Quill || _Quill
-const install = (Vue, globalOptions) => {
-  if (globalOptions) {
-    quillEditor.props.globalOptions.default = () => globalOptions
-  }
-  Vue.component(quillEditor.name, quillEditor)
+quillEditor.install = function(app) {
+  app.component(quillEditor.name, quillEditor)
 }
 
-const VueQuillEditor = { Quill, quillEditor, install }
-
+const VueQuillEditor = { Quill, quillEditor }
 export default VueQuillEditor
-export { Quill, quillEditor, install }
+export { Quill, quillEditor }

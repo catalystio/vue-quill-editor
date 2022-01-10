@@ -8,11 +8,11 @@
 <script>
   // require sources
   import _Quill from 'quill'
-
   const Quill = window.Quill || _Quill
+
   const defaultOptions = {
     theme: 'snow',
-    boundary: document.body,
+    boundary: document.body, 
     modules: {
       toolbar: [
         ['bold', 'italic', 'underline', 'strike'],
@@ -33,7 +33,7 @@
     },
     placeholder: 'Insert text here ...',
     readOnly: false
-  }
+}
 
   // pollfill
   if (typeof Object.assign != 'function') {
@@ -63,6 +63,7 @@
   // export
   export default {
     name: 'quill-editor',
+    emits: ['input', 'change', 'blur', 'focus', 'ready'],
     data() {
       return {
         _options: {},
@@ -73,10 +74,7 @@
     props: {
       content: String,
       value: String,
-      disabled: {
-        type: Boolean,
-        default: false
-      },
+      disabled: Boolean,
       options: {
         type: Object,
         required: false,
@@ -91,7 +89,7 @@
     mounted() {
       this.initialize()
     },
-    beforeDestroy() {
+    beforeMount() {
       this.quill = null
       delete this.quill
     },
@@ -105,8 +103,6 @@
 
           // Instance
           this.quill = new Quill(this.$refs.editor, this._options)
-          
-          this.quill.enable(false)
 
           // Set editor content
           if (this.value || this.content) {
@@ -114,8 +110,8 @@
           }
 
           // Disabled editor
-          if (!this.disabled) {
-            this.quill.enable(true)
+          if (this.disabled) {
+            this.quill.enable(false)
           }
 
           // Mark model as touched if editor lost focus
@@ -145,7 +141,7 @@
     },
     watch: {
       // Watch content change
-      content(newVal, oldVal) {
+      content(newVal) {
         if (this.quill) {
           if (newVal && newVal !== this._content) {
             this._content = newVal
@@ -156,7 +152,7 @@
         }
       },
       // Watch content change
-      value(newVal, oldVal) {
+      value(newVal) {
         if (this.quill) {
           if (newVal && newVal !== this._content) {
             this._content = newVal
@@ -167,7 +163,7 @@
         }
       },
       // Watch disabled change
-      disabled(newVal, oldVal) {
+      disabled(newVal) {
         if (this.quill) {
           this.quill.enable(!newVal)
         }
